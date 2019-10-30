@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>My first Vue app</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+
+        <tweet v-for="tweet in tweets" v-bind:key="tweet.id" v-bind:tweet-text="tweet.tweetText"></tweet>
+    </div>
+
+    <script>
+
+        Vue.component("tweet", {
+            props: ["tweetText"],
+            template: `<div class="app">
+                <div class="tweet-content">
+
+                    <div class="tweet">
+                        <a href="https://twitter.com/kerryjac1">Kerry Jackson</a>
+                        <span>@kerryjac1 · Oct 29</span>
+                        <p class="tweet-text">
+                            {{ tweetText }}
+                        </p>
+                        <div class="reactions-like">
+                            <span v-on:click="toggleLike" class="like">
+                                <span v-if="liked">♥️</span>
+                                <span v-else>♡</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="comment-bar">
+                    <textarea placeholder="tweet your reply" v-model="commentText" v-on:input="countCharacters">
+                </textarea>
+                    <br><span class="characters-remaining">
+                        {{ charactersRemaining }} characters remaining
+                    </span>
+                </div>
+            </div>`,
+            data: function () {
+                return {
+                    charactersRemaining: 280,
+                    commentText: "",
+                    liked: false
+                }
+            },
+            methods: {
+                countCharacters: function () {
+                    this.charactersRemaining = 280 - this.commentText.length
+                },
+                toggleLike: function () {
+                    this.liked = !this.liked
+                }
+            },
+
+        })
+
+        new Vue({
+
+            el: "#app",
+            data: {
+                tweets: [
+                    { id: 1, tweetText: "This is my first Vue application!" },
+                    { id: 2, tweetText: "Pretty cool huh?" },
+                    { id: 3, tweetText: ":D" }
+                ]
+            }
+        })
+
+
+    </script>
+
+    <style>
+        body {
+            background-color: #e6ecf0;
+            font-family: sans-serif;
+        }
+
+        textarea {
+            width: 25%;
+            border: 1px solid #1DA1F2;
+            border-radius: 2px;
+            padding: 2px;
+        }
+
+        .tweet {
+            padding-top: 10px;
+        }
+
+        .reactions-like {
+            cursor: pointer;
+            font-size: 20px;
+        }
+    </style>
+</body>
+
+</html>
